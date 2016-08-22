@@ -24,14 +24,14 @@ object UsersEndpoint extends OauthSpotifyEndpoint {
   def userFollowsPlaylist( authToken: String,
                            playlistOwnerId: String,
                            playlistId: String,
-                           userIds: String*): Option[String] = {
+                           userIds: String): Option[String] = {
 
     // make userIds allowed is 5
     val userIdsLength = userIds.length
     if (userIdsLength > 5) None else {
       val endpoint = usersEndpoint + playlistOwnerId + "/playlists/" + playlistId + "/followers/contains"
       val params = Seq(
-        ("ids", userIds.mkString(","))
+        ("ids", userIds)
       )
       makeRequest(authToken = authToken, endpoint = endpoint, params = params)
     }

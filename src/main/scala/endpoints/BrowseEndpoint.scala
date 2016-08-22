@@ -8,7 +8,7 @@ object BrowseEndpoint extends OauthSpotifyEndpoint {
     makeRequest(authToken = oauthToken, endpoint = browseEndpoint + "featured-playlists")
   }
 
-  def getNewRelease(oauthToken: String): Option[String] = {
+  def getNewReleases(oauthToken: String): Option[String] = {
     makeRequest(authToken = oauthToken, endpoint = browseEndpoint + "new-releases")
   }
 

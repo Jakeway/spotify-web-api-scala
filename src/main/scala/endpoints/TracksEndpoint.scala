@@ -8,6 +8,6 @@ object TracksEndpoint extends SpotifyEndpoint {
   def getTrack(trackId: String): String =
     makeRequest(tracksEndpoint + trackId)
 
-  def getTracks(trackIds: String*): String =
-    makeRequest(tracksEndpoint, params = Seq(("ids", trackIds.mkString(","))))
+  def getTracks(trackIds: String): String =
+    makeRequest(tracksEndpoint, params = Seq(("ids", trackIds)))
 }

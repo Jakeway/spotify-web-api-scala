@@ -9,8 +9,8 @@ object ArtistsEndpoint extends SpotifyEndpoint {
     makeRequest(endpoint = artistEndpoint + artistId)
   }
 
-  def getArtists(artistIds: String*): String = {
-    makeRequest(endpoint = artistEndpoint, params = Seq(("ids", artistIds.mkString(","))))
+  def getArtists(artistIds: String): String = {
+    makeRequest(endpoint = artistEndpoint, params = Seq(("ids", artistIds)))
   }
 
   def getArtistAlbums(artistId: String): String = {
@@ -21,7 +21,7 @@ object ArtistsEndpoint extends SpotifyEndpoint {
     makeRequest(endpoint = artistEndpoint + artistId + "/top-tracks")
   }
 
-  def getArtistRelatedArtists(artistId: String): String = {
+  def getRelatedArtists(artistId: String): String = {
     makeRequest(endpoint = artistEndpoint + artistId + "/related-artists")
   }
 }

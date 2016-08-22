@@ -16,9 +16,9 @@ object MeEndpoint extends OauthSpotifyEndpoint {
     makeRequest(authToken = oauthToken, endpoint = meEndpoint + "albums")
 
 
-  def userSavedAlbumsContains(oauthToken: String, albumIds: String*): Option[String] = {
+  def userSavedAlbumsContains(oauthToken: String, albumIds: String): Option[String] = {
     val endPoint = meEndpoint + "album/contains/"
-    makeRequest(authToken = oauthToken, endpoint = endPoint, params = Seq(("ids", albumIds.mkString(","))))
+    makeRequest(authToken = oauthToken, endpoint = endPoint, params = Seq(("ids", albumIds)))
   }
 
   /**
@@ -29,12 +29,12 @@ object MeEndpoint extends OauthSpotifyEndpoint {
     makeRequest(authToken = oauthToken, endpoint = meEndpoint + "following", params = Seq(("type", "artist")))
 
 
-  def userFollowingContains(oauthToken: String, containsType: String, ids: String*): Option[String] =
+  def userFollowingContains(oauthToken: String, containsType: String, ids: String): Option[String] =
     containsType.toUpperCase match {
       case "ARTIST" | "USER" =>
         val params = Seq(
           ("type", containsType),
-          ("ids", ids.mkString(","))
+          ("ids", ids)
         )
         val endpoint = meEndpoint + "following/contains"
         makeRequest(authToken = oauthToken, endpoint = endpoint, params = params)
@@ -48,9 +48,9 @@ object MeEndpoint extends OauthSpotifyEndpoint {
   def getUserTracks(oauthToken: String): Option[String] =
     makeRequest(authToken = oauthToken, endpoint = meEndpoint + "tracks")
 
-  def userTracksContains(oauthToken: String, trackIds: String*): Option[String] = {
+  def userTracksContains(oauthToken: String, trackIds: String): Option[String] = {
     val endpoint = meEndpoint + "tracks/contains"
-    makeRequest(authToken = oauthToken, endpoint = endpoint, params = Seq(("ids", trackIds.mkString(","))))
+    makeRequest(authToken = oauthToken, endpoint = endpoint, params = Seq(("ids", trackIds)))
   }
 
   /**
@@ -70,7 +70,7 @@ object MeEndpoint extends OauthSpotifyEndpoint {
     * Playlists
     */
 
-  def getUserPlaylists(oauthToken: String): Option[String] =
+  def getCurrentUserPlaylists(oauthToken: String): Option[String] =
     makeRequest(authToken = oauthToken, endpoint = meEndpoint + "playlists")
 
   /**

@@ -9,8 +9,8 @@ object AlbumsEndpoint extends SpotifyEndpoint {
     makeRequest(endpoint = albumEndpoint + albumId)
   }
 
-  def getAlbums(albumIds: String*): String = {
-    makeRequest(endpoint = albumEndpoint, params = Seq(("ids", albumIds.mkString(","))))
+  def getAlbums(albumIds: String): String = {
+    makeRequest(endpoint = albumEndpoint, params = Seq(("ids", albumIds)))
   }
 
   def getAlbumTracks(albumId: String): String = {

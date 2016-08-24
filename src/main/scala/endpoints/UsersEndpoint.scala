@@ -1,5 +1,7 @@
 package endpoints
 
+import scalaj.http.HttpResponse
+
 
 object UsersEndpoint extends OauthSpotifyEndpoint {
 
@@ -9,29 +11,29 @@ object UsersEndpoint extends OauthSpotifyEndpoint {
     * Playlists
     */
 
-  def getUserPlaylist(authToken: String, userId: String, playlistId: String): Option[String] = {
+  def getUserPlaylist(authToken: String, userId: String, playlistId: String): Option[HttpResponse[String]] = {
     makeRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists/" + playlistId)
   }
 
-  def getUserPlaylists(authToken: String, userId: String): Option[String] = {
+  def getUserPlaylists(authToken: String, userId: String): Option[HttpResponse[String]] = {
     makeRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists")
   }
 
-  def getUserPlaylistTracks(authToken: String, userId: String, playlistId: String): Option[String] = {
+  def getUserPlaylistTracks(authToken: String, userId: String, playlistId: String): Option[HttpResponse[String]] = {
     makeRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists" + playlistId + "/tracks")
   }
 
   def userFollowsPlaylist( authToken: String,
                            playlistOwnerId: String,
                            playlistId: String,
-                           userIds: String): Option[String] = {
+                           userIds: Seq[String]): Option[HttpResponse[String]] = {
 
     // make userIds allowed is 5
     val userIdsLength = userIds.length
     if (userIdsLength > 5) None else {
       val endpoint = usersEndpoint + playlistOwnerId + "/playlists/" + playlistId + "/followers/contains"
       val params = Seq(
-        ("ids", userIds)
+        ("ids", userIds.mkString(","))
       )
       makeRequest(authToken = authToken, endpoint = endpoint, params = params)
     }
@@ -41,7 +43,7 @@ object UsersEndpoint extends OauthSpotifyEndpoint {
     * Profiles
     */
 
-  def getUserProfile(userId: String): String = {
+  def getUserProfile(userId: String): HttpResponse[String] = {
     makeRequest(usersEndpoint + userId)
   }
 }

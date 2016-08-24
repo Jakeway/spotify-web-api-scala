@@ -1,5 +1,7 @@
 package endpoints
 
+import scalaj.http.HttpResponse
+
 
 object RecommendationsEndpoint extends OauthSpotifyEndpoint {
 
@@ -8,7 +10,7 @@ object RecommendationsEndpoint extends OauthSpotifyEndpoint {
   def getRecommendations(authToken: String,
                          seedArtists: Seq[String],
                          seedGenres: Seq[String],
-                         seedTracks: Seq[String]): Option[String] = {
+                         seedTracks: Seq[String]): Option[HttpResponse[String]] = {
 
     // spotify dictates max of 5 seed combinations from {artists, genres, tracks}
 

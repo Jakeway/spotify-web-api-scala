@@ -1,4 +1,6 @@
-# Spotify Web API Scala Client
+[![Build Status](https://travis-ci.org/Jakeway/spotify-web-api-scala.svg?branch=master)](https://travis-ci.org/Jakeway/spotify-web-api-scala)
+
+# Spotify Web API Scala Client 
 
 A Scala client for interacting with the Spotify Web API.
 

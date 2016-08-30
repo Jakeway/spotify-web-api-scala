@@ -24,7 +24,7 @@ val token = "ValidAuthTokenHere"
 val spotify = new SpotifyClient(token)
 val profile = spotify.Users.getCurrentUserProfile
 ```
-_If you try to make a request to an endpoint that requires authentication, you will get back a None object (perhaps should throw an exception)_
+_If you try to make a request to an endpoint that requires authentication, you will get back a None object (perhaps should throw an exception?)_
 
 ## Notes
 

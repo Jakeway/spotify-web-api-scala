@@ -1,14 +1,14 @@
 package endpoints
 
-import scalaj.http.{Http, HttpResponse}
+import scalaj.http.{Http, HttpRequest}
 
 abstract class SpotifyEndpoint {
 
   protected val baseAPIUrl = "https://api.spotify.com"
 
-  protected def makeRequest(endpoint: String): HttpResponse[String] = Http(endpoint).asString
+  protected def createRequest(endpoint: String): HttpRequest = Http(endpoint)
 
-  protected def makeRequest(endpoint: String, params: Seq[(String, String)]): HttpResponse[String] = {
-    Http(endpoint).params(params).asString
+  protected def createRequest(endpoint: String, params: Seq[(String, String)]): HttpRequest = {
+    Http(endpoint).params(params)
   }
 }

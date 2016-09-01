@@ -1,6 +1,6 @@
 package endpoints
 
-import scalaj.http.HttpResponse
+import scalaj.http.HttpRequest
 
 
 object UsersEndpoint extends OauthSpotifyEndpoint {
@@ -11,31 +11,31 @@ object UsersEndpoint extends OauthSpotifyEndpoint {
     * Playlists
     */
 
-  def getUserPlaylist(authToken: String, userId: String, playlistId: String): Option[HttpResponse[String]] = {
-    makeRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists/" + playlistId)
+  def getUserPlaylist(authToken: String, userId: String, playlistId: String): Option[HttpRequest] = {
+    createRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists/" + playlistId)
   }
 
-  def getUserPlaylists(authToken: String, userId: String): Option[HttpResponse[String]] = {
-    makeRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists")
+  def getUserPlaylists(authToken: String, userId: String): Option[HttpRequest] = {
+    createRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists")
   }
 
-  def getUserPlaylistTracks(authToken: String, userId: String, playlistId: String): Option[HttpResponse[String]] = {
-    makeRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists" + playlistId + "/tracks")
+  def getUserPlaylistTracks(authToken: String, userId: String, playlistId: String): Option[HttpRequest] = {
+    createRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists" + playlistId + "/tracks")
   }
 
   def userFollowsPlaylist( authToken: String,
                            playlistOwnerId: String,
                            playlistId: String,
-                           userIds: Seq[String]): Option[HttpResponse[String]] = {
+                           userIds: Seq[String]): Option[HttpRequest] = {
 
-    // make userIds allowed is 5
+    // create userIds allowed is 5
     val userIdsLength = userIds.length
     if (userIdsLength > 5) None else {
       val endpoint = usersEndpoint + playlistOwnerId + "/playlists/" + playlistId + "/followers/contains"
       val params = Seq(
         ("ids", userIds.mkString(","))
       )
-      makeRequest(authToken = authToken, endpoint = endpoint, params = params)
+      createRequest(authToken = authToken, endpoint = endpoint, params = params)
     }
   }
 
@@ -43,7 +43,7 @@ object UsersEndpoint extends OauthSpotifyEndpoint {
     * Profiles
     */
 
-  def getUserProfile(userId: String): HttpResponse[String] = {
-    makeRequest(usersEndpoint + userId)
+  def getUserProfile(userId: String): HttpRequest = {
+    createRequest(usersEndpoint + userId)
   }
 }

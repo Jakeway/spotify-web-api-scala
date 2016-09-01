@@ -1,15 +1,15 @@
 package endpoints
 
-import scalaj.http.HttpResponse
+import scalaj.http.HttpRequest
 
 
 object TracksEndpoint extends SpotifyEndpoint {
 
   private val tracksEndpoint = baseAPIUrl + "/v1/tracks/"
 
-  def getTrack(trackId: String): HttpResponse[String] =
-    makeRequest(tracksEndpoint + trackId)
+  def getTrack(trackId: String): HttpRequest =
+    createRequest(tracksEndpoint + trackId)
 
-  def getTracks(trackIds: Seq[String]): HttpResponse[String] =
-    makeRequest(tracksEndpoint, params = Seq(("ids", trackIds.mkString(","))))
+  def getTracks(trackIds: Seq[String]): HttpRequest =
+    createRequest(tracksEndpoint, params = Seq(("ids", trackIds.mkString(","))))
 }

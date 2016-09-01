@@ -1,6 +1,6 @@
 package endpoints
 
-import scalaj.http.{Http, HttpResponse}
+import scalaj.http.{Http, HttpRequest}
 
 abstract class OauthSpotifyEndpoint extends SpotifyEndpoint {
 
@@ -14,17 +14,17 @@ abstract class OauthSpotifyEndpoint extends SpotifyEndpoint {
     case Some(authHeader) => Some(Map("Authorization" -> authHeader))
   }
 
-  protected def makeRequest(authToken:String, endpoint: String): Option[HttpResponse[String]] = {
+  protected def createRequest(authToken:String, endpoint: String): Option[HttpRequest] = {
     getAuthHeaders(authToken).map(headers => {
-      Some(Http(endpoint).headers(headers).asString)
+      Some(Http(endpoint).headers(headers))
     }).getOrElse(None)
   }
 
-  protected def makeRequest(authToken:String,
+  protected def createRequest(authToken:String,
                             endpoint: String,
-                            params: Seq[(String, String)]) : Option[HttpResponse[String]] = {
+                            params: Seq[(String, String)]) : Option[HttpRequest] = {
     getAuthHeaders(authToken).map(headers => {
-      Some(Http(endpoint).headers(headers).params(params).asString)
+      Some(Http(endpoint).headers(headers).params(params))
     }).getOrElse(None)
   }
 }

@@ -1,6 +1,6 @@
 package endpoints
 
-import scalaj.http.HttpResponse
+import scalaj.http.HttpRequest
 
 
 /**
@@ -15,24 +15,24 @@ object MeEndpoint extends OauthSpotifyEndpoint {
     * Albums
     */
 
-  def getUserSavedAlbums(oauthToken: String): Option[HttpResponse[String]] =
-    makeRequest(authToken = oauthToken, endpoint = meEndpoint + "albums")
+  def getUserSavedAlbums(oauthToken: String): Option[HttpRequest] =
+    createRequest(authToken = oauthToken, endpoint = meEndpoint + "albums")
 
 
-  def userSavedAlbumsContains(oauthToken: String, albumIds: Seq[String]): Option[HttpResponse[String]] = {
+  def userSavedAlbumsContains(oauthToken: String, albumIds: Seq[String]): Option[HttpRequest] = {
     val endPoint = meEndpoint + "album/contains/"
-    makeRequest(authToken = oauthToken, endpoint = endPoint, params = Seq(("ids", albumIds.mkString(","))))
+    createRequest(authToken = oauthToken, endpoint = endPoint, params = Seq(("ids", albumIds.mkString(","))))
   }
 
   /**
     * Following
     */
 
-  def getUserFollowing(oauthToken: String): Option[HttpResponse[String]] =
-    makeRequest(authToken = oauthToken, endpoint = meEndpoint + "following", params = Seq(("type", "artist")))
+  def getUserFollowing(oauthToken: String): Option[HttpRequest] =
+    createRequest(authToken = oauthToken, endpoint = meEndpoint + "following", params = Seq(("type", "artist")))
 
 
-  def userFollowingContains(oauthToken: String, containsType: String, ids: Seq[String]): Option[HttpResponse[String]] =
+  def userFollowingContains(oauthToken: String, containsType: String, ids: Seq[String]): Option[HttpRequest] =
     containsType.toUpperCase match {
       case "ARTIST" | "USER" =>
         val params = Seq(
@@ -40,7 +40,7 @@ object MeEndpoint extends OauthSpotifyEndpoint {
           ("ids", ids.mkString(","))
         )
         val endpoint = meEndpoint + "following/contains"
-        makeRequest(authToken = oauthToken, endpoint = endpoint, params = params)
+        createRequest(authToken = oauthToken, endpoint = endpoint, params = params)
       case _ => None
     }
 
@@ -48,39 +48,39 @@ object MeEndpoint extends OauthSpotifyEndpoint {
     * Tracks
     */
 
-  def getUserTracks(oauthToken: String): Option[HttpResponse[String]] =
-    makeRequest(authToken = oauthToken, endpoint = meEndpoint + "tracks")
+  def getUserTracks(oauthToken: String): Option[HttpRequest] =
+    createRequest(authToken = oauthToken, endpoint = meEndpoint + "tracks")
 
-  def userTracksContains(oauthToken: String, trackIds: Seq[String]): Option[HttpResponse[String]] = {
+  def userTracksContains(oauthToken: String, trackIds: Seq[String]): Option[HttpRequest] = {
     val endpoint = meEndpoint + "tracks/contains"
-    makeRequest(authToken = oauthToken, endpoint = endpoint, params = Seq(("ids", trackIds.mkString(","))))
+    createRequest(authToken = oauthToken, endpoint = endpoint, params = Seq(("ids", trackIds.mkString(","))))
   }
 
   /**
     * Personalization
     */
 
-  private def getUserTopItems(oauthToken: String, itemType: String): Option[HttpResponse[String]] =
-    makeRequest(authToken = oauthToken, endpoint = meEndpoint + "top/" + itemType)
+  private def getUserTopItems(oauthToken: String, itemType: String): Option[HttpRequest] =
+    createRequest(authToken = oauthToken, endpoint = meEndpoint + "top/" + itemType)
 
-  def getUserTopArtists(oauthToken: String): Option[HttpResponse[String]] =
+  def getUserTopArtists(oauthToken: String): Option[HttpRequest] =
     getUserTopItems(oauthToken, "artists")
 
-  def getUserTopTracks(oauthToken: String): Option[HttpResponse[String]] =
+  def getUserTopTracks(oauthToken: String): Option[HttpRequest] =
     getUserTopItems(oauthToken, "tracks")
 
   /**
     * Playlists
     */
 
-  def getCurrentUserPlaylists(oauthToken: String): Option[HttpResponse[String]] =
-    makeRequest(authToken = oauthToken, endpoint = meEndpoint + "playlists")
+  def getCurrentUserPlaylists(oauthToken: String): Option[HttpRequest] =
+    createRequest(authToken = oauthToken, endpoint = meEndpoint + "playlists")
 
   /**
     * Profiles
     */
 
-  def getCurrentUserProfile(oauthToken: String): Option[HttpResponse[String]] = {
-    makeRequest(authToken = oauthToken, endpoint = meEndpoint)
+  def getCurrentUserProfile(oauthToken: String): Option[HttpRequest] = {
+    createRequest(authToken = oauthToken, endpoint = meEndpoint)
   }
 }

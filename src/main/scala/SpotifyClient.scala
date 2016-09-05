@@ -1,6 +1,5 @@
 import endpoints._
 
-
 /**
   * SpotifyClient is the main class used to interact with the Spotify API's.
   *
@@ -11,6 +10,7 @@ import endpoints._
   * @param authToken oauthToken used to make API calls which require authorization
   *
   */
+
 class SpotifyClient(authToken: String = "") {
 
   object Albums {

@@ -1,4 +1,8 @@
 import endpoints._
+import models._
+import org.json4s._
+import org.json4s.jackson.JsonMethods._
+
 
 /**
   * SpotifyClient is the main class used to interact with the Spotify API's.
@@ -13,6 +17,8 @@ import endpoints._
 
 class SpotifyClient(authToken: String = "") {
 
+  implicit val formats = DefaultFormats
+
   object Albums {
 
     def getUserSavedAlbums: Option[String] =
@@ -23,8 +29,11 @@ class SpotifyClient(authToken: String = "") {
       MeEndpoint.userSavedAlbumsContains(oauthToken = authToken, albumIds)
         .map(response => response.asString.body).orElse(None)
 
-    def getAlbum(albumId: String): String =
-      AlbumsEndpoint.getAlbum(albumId).asString.body
+    def getAlbum(albumId: String): AlbumFull = {
+      val json = parse(AlbumsEndpoint.getAlbum(albumId).asString.body)
+      val album = json.extract[AlbumFull]
+      album
+    }
 
     def getAlbums(albumIds: Seq[String]): String =
       AlbumsEndpoint.getAlbums(albumIds).asString.body

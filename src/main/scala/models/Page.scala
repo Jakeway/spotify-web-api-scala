@@ -1,6 +1,6 @@
 package models
 
-case class Paging[T] (
+case class Page[T](
                        href: String,
                        items: List[T],
                        limit: Int,
@@ -8,4 +8,4 @@ case class Paging[T] (
                        offset: Int,
                        previous: Option[String],
                        total: Int
-                     )
+                  )

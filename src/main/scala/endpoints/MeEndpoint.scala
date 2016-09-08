@@ -20,7 +20,7 @@ object MeEndpoint extends OauthSpotifyEndpoint {
 
 
   def userSavedAlbumsContains(oauthToken: String, albumIds: Seq[String]): Option[HttpRequest] = {
-    val endPoint = meEndpoint + "album/contains/"
+    val endPoint = meEndpoint + "albums/contains"
     createRequest(authToken = oauthToken, endpoint = endPoint, params = Seq(("ids", albumIds.mkString(","))))
   }
 

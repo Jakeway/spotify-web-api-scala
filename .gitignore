@@ -1,5 +1,6 @@
 *.class
 *.log
+test.sc
 
 # sbt specific
 .cache

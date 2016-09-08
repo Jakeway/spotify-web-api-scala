@@ -1,7 +1,5 @@
 package models
 
-trait Track
-
 case class TrackSimple(
                       artists: List[ArtistSimple],
                       available_markets: List[String],

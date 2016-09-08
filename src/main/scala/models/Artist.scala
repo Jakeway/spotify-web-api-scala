@@ -1,10 +1,14 @@
 package models
 
-case class ArtistSimple(
-                         external_urls: ExternalURL,
-                         href: String,
-                         id: String,
-                         name: String,
-                         `type`: String,
-                         uri: String
-                       )
+case class Artist(
+                   external_urls: ExternalURL,
+                   followers: Followers,
+                   genres: List[String],
+                   href: String,
+                   id: String,
+                   images: List[Image],
+                   name: String,
+                   popularity: Int,
+                   `type`: String,
+                   uri: String
+                 )

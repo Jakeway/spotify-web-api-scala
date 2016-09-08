@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 import endpoints._
 import models._
 import org.json4s._
@@ -17,35 +19,50 @@ import org.json4s.jackson.JsonMethods._
 
 class SpotifyClient(authToken: String = "") {
 
-  implicit val formats = DefaultFormats
+  implicit val formats = new DefaultFormats {
+    override def dateFormatter: SimpleDateFormat = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:SS'Z'")
+  }
 
   object Albums {
 
-    def getUserSavedAlbums: Option[String] =
+    def getUserSavedAlbums: Option[Page[SavedAlbum]] =
       MeEndpoint.getUserSavedAlbums(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          parse(response.body).extract[Page[SavedAlbum]]
+        }).orElse(None)
 
-    def userSavedAlbumsContains(albumIds: Seq[String]): Option[String] =
+    def userSavedAlbumsContains(albumIds: Seq[String]): Option[Boolean] =
       MeEndpoint.userSavedAlbumsContains(oauthToken = authToken, albumIds)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString.body
+          parse(response).extract[List[Boolean]].head
+        }).orElse(None)
 
-    def getAlbum(albumId: String): AlbumFull = {
-      val json = parse(AlbumsEndpoint.getAlbum(albumId).asString.body)
-      val album = json.extract[AlbumFull]
-      album
+    def getAlbum(albumId: String): Album = {
+      val response = AlbumsEndpoint.getAlbum(albumId).asString
+      parse(response.body).extract[Album]
     }
 
-    def getAlbums(albumIds: Seq[String]): String =
-      AlbumsEndpoint.getAlbums(albumIds).asString.body
+    def getAlbums(albumIds: Seq[String]): Seq[Album] = {
+      val response = AlbumsEndpoint.getAlbums(albumIds).asString
+      val json = parse(response.body)
+      (json \ "albums").extract[List[Album]]
+    }
 
-    def getAlbumTracks(albumId: String): String =
-      AlbumsEndpoint.getAlbumTracks(albumId).asString.body
+    def getAlbumTracks(albumId: String): Page[TrackSimple] = {
+      val response = AlbumsEndpoint.getAlbumTracks(albumId).asString
+      parse(response.body).extract[Page[TrackSimple]]
+    }
   }
 
   object Artists {
 
-    def getArtist(artistId: String): String =
-      ArtistsEndpoint.getArtist(artistId).asString.body
+    def getArtist(artistId: String): ArtistSimple = {
+      val response = ArtistsEndpoint.getArtist(artistId).asString
+      parse(response.body).extract[ArtistSimple]
+    }
+
 
     def getArtists(artistIds: Seq[String]): String =
       ArtistsEndpoint.getArtists(artistIds).asString.body

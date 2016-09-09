@@ -89,36 +89,64 @@ class SpotifyClient(authToken: String = "") {
 
   object AudioFeatures {
 
-    def getAudioFeatures(trackId: String): Option[String] =
+    def getAudioFeatures(trackId: String): Option[AudioFeatures] =
       AudioFeaturesEndpoint.getAudioFeatures(oauthToken = authToken, trackId = trackId)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          parse(response.body).extract[AudioFeatures]
+        }).orElse(None)
 
-    def getAudioFeatures(trackIds: Seq[String]): Option[String] =
+    def getAudioFeatures(trackIds: Seq[String]): Option[Seq[AudioFeatures]] =
       AudioFeaturesEndpoint.getMultipleAudioFeatures(oauthToken = authToken, trackIds)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          val json = parse(response.body)
+          (json \ "audio_features").extract[List[AudioFeatures]]
+        }).orElse(None)
   }
 
   object Browse {
 
-    def getFeaturedPlaylists: Option[String] =
+    def getFeaturedPlaylists: Option[FeaturedPlaylist] =
       BrowseEndpoint.getFeaturedPlaylists(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          val json = parse(response.body)
+          val message = (json \ "message").extract[String]
+          val playlists = (json \ "playlists").extract[Page[PlaylistSimple]]
+          FeaturedPlaylist(message, playlists)
+        }).orElse(None)
 
-    def getNewReleases: Option[String] =
+    def getNewReleases: Option[Page[AlbumSimple]] =
       BrowseEndpoint.getNewReleases(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          val json = parse(response.body)
+          (json \ "albums").extract[Page[AlbumSimple]]
+        }).orElse(None)
 
-    def getCategories: Option[String] =
+    def getCategories: Option[Page[Category]] =
       BrowseEndpoint.getCategories(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          val json = parse(response.body)
+          (json \ "categories").extract[Page[Category]]
+        }).orElse(None)
 
-    def getCategory(categoryId: String): Option[String] =
+    def getCategory(categoryId: String): Option[Category] =
       BrowseEndpoint.getCategory(oauthToken = authToken, categoryId = categoryId)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          parse(response.body).extract[Category]
+        }).orElse(None)
 
-    def getCategoryPlaylists(categoryId: String): Option[String] =
+    def getCategoryPlaylists(categoryId: String): Option[Page[PlaylistSimple]] =
       BrowseEndpoint.getCategoryPlaylists(oauthToken = authToken, categoryId = categoryId)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          val json = parse(response.body)
+          (json \ "playlists").extract[Page[PlaylistSimple]]
+        }).orElse(None)
   }
 
   object Recommendations {
@@ -131,7 +159,7 @@ class SpotifyClient(authToken: String = "") {
         seedArtists = seedArtists,
         seedGenres = seedGenres,
         seedTracks = seedTracks)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
   }
 
   object Search {
@@ -150,31 +178,31 @@ class SpotifyClient(authToken: String = "") {
 
     def getUserTracks: Option[String] =
       MeEndpoint.getUserTracks(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def userTracksContains(trackIds: Seq[String]): Option[String] =
       MeEndpoint.
         userTracksContains(oauthToken = authToken, trackIds = trackIds)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
   }
 
   object Users {
 
     def getCurrentUserPlaylists: Option[String] =
       MeEndpoint.getCurrentUserPlaylists(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def getUserPlaylist(userId: String, playlistId: String): Option[String] =
       UsersEndpoint.getUserPlaylist(authToken = authToken, userId = userId, playlistId = playlistId)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def getUserPlaylists(userId: String): Option[String] =
       UsersEndpoint.getUserPlaylists(authToken = authToken, userId = userId)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def getUserPlaylistTracks(userId: String, playlistId: String): Option[String] =
       UsersEndpoint.getUserPlaylistTracks(authToken = authToken, userId = userId, playlistId = playlistId)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def userFollowsPlaylist(playlistOwnerId: String,
                             playlistId: String,
@@ -184,32 +212,32 @@ class SpotifyClient(authToken: String = "") {
         playlistOwnerId = playlistOwnerId,
         playlistId = playlistId,
         userIds = userIds)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def getUserFollowing: Option[String] =
       MeEndpoint.getUserFollowing(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def userFollowingContains(containsType: String, ids: Seq[String]): Option[String] =
       MeEndpoint.userFollowingContains(
         oauthToken = authToken,
         containsType = containsType,
         ids = ids)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def getUserTopArtists: Option[String] =
       MeEndpoint.getUserTopArtists(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def getUserTopTracks: Option[String] =
       MeEndpoint.getUserTopTracks(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
 
     def getUserProfile(userId: String): String =
       UsersEndpoint.getUserProfile(userId).asString.body
 
     def getCurrentUserProfile: Option[String] =
       MeEndpoint.getCurrentUserProfile(oauthToken = authToken)
-        .map(response => response.asString.body).orElse(None)
+        .map(request => request.asString.body).orElse(None)
   }
 }

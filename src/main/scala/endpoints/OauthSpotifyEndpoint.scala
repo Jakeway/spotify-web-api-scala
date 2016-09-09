@@ -9,7 +9,7 @@ abstract class OauthSpotifyEndpoint extends SpotifyEndpoint {
     case token => Some("Bearer " + token)
   }
 
-  protected def getAuthHeaders(authToken: String): Option[Map[String, String]] = getOauthBearer(authToken) match {
+  private def getAuthHeaders(authToken: String): Option[Map[String, String]] = getOauthBearer(authToken) match {
     case None => None
     case Some(authHeader) => Some(Map("Authorization" -> authHeader))
   }

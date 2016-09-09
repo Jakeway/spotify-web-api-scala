@@ -58,11 +58,10 @@ class SpotifyClient(authToken: String = "") {
 
   object Artists {
 
-    def getArtist(artistId: String): ArtistSimple = {
+    def getArtist(artistId: String): Artist = {
       val response = ArtistsEndpoint.getArtist(artistId).asString
-      parse(response.body).extract[ArtistSimple]
+      parse(response.body).extract[Artist]
     }
-
 
     def getArtists(artistIds: Seq[String]): String =
       ArtistsEndpoint.getArtists(artistIds).asString.body

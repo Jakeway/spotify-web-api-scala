@@ -1,7 +1,7 @@
 package models
 
 case class Artist(
-                   external_urls: ExternalURL,
+                   external_urls: Map[String, String],
                    followers: Followers,
                    genres: List[String],
                    href: String,

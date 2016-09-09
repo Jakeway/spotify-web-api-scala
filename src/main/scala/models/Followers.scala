@@ -1,6 +1,6 @@
 package models
 
 case class Followers(
-                    href: String,
+                    href: Option[String],
                     total: Int
                     )

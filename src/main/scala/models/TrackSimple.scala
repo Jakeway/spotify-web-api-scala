@@ -6,7 +6,7 @@ case class TrackSimple(
                       disc_number: Int,
                       duration_ms: Int,
                       explicit: Boolean,
-                      external_urls: ExternalURL,
+                      external_urls: Map[String, String],
                       href: String,
                       id: String,
                       is_playable: Option[Boolean],

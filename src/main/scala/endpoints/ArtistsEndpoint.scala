@@ -19,8 +19,8 @@ object ArtistsEndpoint extends SpotifyEndpoint {
     createRequest(endpoint = artistEndpoint + artistId + "/albums")
   }
 
-  def getArtistTopTracks(artistId: String): HttpRequest = {
-    createRequest(endpoint = artistEndpoint + artistId + "/top-tracks")
+  def getArtistTopTracks(artistId: String, country: String = "US"): HttpRequest = {
+    createRequest(endpoint = artistEndpoint + artistId + "/top-tracks", params = Seq(("country", country)))
   }
 
   def getRelatedArtists(artistId: String): HttpRequest = {

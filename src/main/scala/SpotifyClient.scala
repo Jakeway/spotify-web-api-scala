@@ -63,17 +63,28 @@ class SpotifyClient(authToken: String = "") {
       parse(response.body).extract[Artist]
     }
 
-    def getArtists(artistIds: Seq[String]): String =
-      ArtistsEndpoint.getArtists(artistIds).asString.body
+    def getArtists(artistIds: Seq[String]): Seq[Artist] = {
+      val response = ArtistsEndpoint.getArtists(artistIds).asString
+      val json = parse(response.body)
+      (json \ "artists").extract[List[Artist]]
+    }
 
-    def getArtistAlbums(artistId: String): String =
-      ArtistsEndpoint.getArtistAlbums(artistId).asString.body
+    def getArtistAlbums(artistId: String): Page[AlbumSimple] = {
+      val response = ArtistsEndpoint.getArtistAlbums(artistId).asString
+      parse(response.body).extract[Page[AlbumSimple]]
+    }
 
-    def getArtistTopTracks(artistId: String): String =
-      ArtistsEndpoint.getArtistTopTracks(artistId).asString.body
+    def getArtistTopTracks(artistId: String): Seq[Track] = {
+      val response = ArtistsEndpoint.getArtistTopTracks(artistId).asString
+      val json = parse(response.body)
+      (json \ "tracks").extract[List[Track]]
+    }
 
-    def getArtistRelatedArtists(artistId: String): String =
-      ArtistsEndpoint.getRelatedArtists(artistId).asString.body
+    def getArtistRelatedArtists(artistId: String): Seq[Artist] = {
+      val response = ArtistsEndpoint.getRelatedArtists(artistId).asString
+      val json = parse(response.body)
+      (json \ "artists").extract[List[Artist]]
+    }
   }
 
   object AudioFeatures {

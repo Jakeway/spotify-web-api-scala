@@ -1,3 +1,3 @@
 package models
 
-case class Image(height: Int, url: String, width: Int)
+case class Image(height: Option[Int], url: String, width: Option[Int])

@@ -20,7 +20,7 @@ object UsersEndpoint extends OauthSpotifyEndpoint {
   }
 
   def getUserPlaylistTracks(authToken: String, userId: String, playlistId: String): Option[HttpRequest] = {
-    createRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists" + playlistId + "/tracks")
+    createRequest(authToken = authToken, endpoint = usersEndpoint + userId + "/playlists/" + playlistId + "/tracks")
   }
 
   def userFollowsPlaylist( authToken: String,

@@ -28,8 +28,8 @@ object MeEndpoint extends OauthSpotifyEndpoint {
     * Following
     */
 
-  def getUserFollowing(oauthToken: String): Option[HttpRequest] =
-    createRequest(authToken = oauthToken, endpoint = meEndpoint + "following", params = Seq(("type", "artist")))
+  def getUserFollowing(oauthToken: String, `type`: String): Option[HttpRequest] =
+    createRequest(authToken = oauthToken, endpoint = meEndpoint + "following", params = Seq(("type", `type`)))
 
 
   def userFollowingContains(oauthToken: String, containsType: String, ids: Seq[String]): Option[HttpRequest] =

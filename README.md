@@ -11,11 +11,12 @@ More documentation about the Spotify Web API can be found [here.](https://develo
 
 ## Sample Usage
 
-_Getting an album (no auth required)_
+_Getting an album and printing out all artists who worked on the album (no auth required)_
 ```
-val spotify = new SpotifyClient()
+val spotify = new SpotifyClient
 val reflektorID = "4E0m7AIVc2d2QZMrMNXdMZ"
-val reklektorAlbum = spotify.Albums.getAlbum(reflektorID)
+val album = spotify.Albums.getAlbum(reflektorID)
+album.artists.foreach(artist => println(artist.name))
 ```
 
 _Getting current user's profile (auth required)_
@@ -24,7 +25,7 @@ val token = "ValidAuthTokenHere"
 val spotify = new SpotifyClient(token)
 val profile = spotify.Users.getCurrentUserProfile
 ```
-_If you try to make a request to an endpoint that requires authentication, you will get back a None object (perhaps should throw an exception?)_
+_If you try to make a request to an endpoint that requires authentication without specifying an auth token, you will get back a None object (perhaps should throw an exception?)_
 
 ## Notes
 
@@ -39,10 +40,10 @@ All of the requests are grouped into Objects inside of the SpotifyClient. Those 
 * Users
 
 ### todo
-* marshall the string response into JSON
 * post / put / delete requests
 * optional parameters
+* better search functionality
 * use the oauth token provided even if the endpoint doesn't require one (increase rate-limits)
 * create test cases
 * add documentation
-* sample code
+* more sample code

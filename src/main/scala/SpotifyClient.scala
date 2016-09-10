@@ -32,11 +32,11 @@ class SpotifyClient(authToken: String = "") {
           parse(response.body).extract[Page[SavedAlbum]]
         }).orElse(None)
 
-    def userSavedAlbumsContains(albumIds: Seq[String]): Option[Boolean] =
+    def userSavedAlbumsContains(albumIds: Seq[String]): Option[List[Boolean]] =
       MeEndpoint.userSavedAlbumsContains(oauthToken = authToken, albumIds)
         .map(request => {
-          val response = request.asString.body
-          parse(response).extract[List[Boolean]].head
+          val response = request.asString
+          parse(response.body).extract[List[Boolean]]
         }).orElse(None)
 
     def getAlbum(albumId: String): Album = {
@@ -175,20 +175,30 @@ class SpotifyClient(authToken: String = "") {
 
   object Tracks {
 
-    def getTrack(trackId: String): String =
-      TracksEndpoint.getTrack(trackId).asString.body
+    def getTrack(trackId: String): Track = {
+      val response = TracksEndpoint.getTrack(trackId).asString
+      parse(response.body).extract[Track]
+    }
 
-    def getTracks(trackIds: Seq[String]): String =
-      TracksEndpoint.getTracks(trackIds).asString.body
+    def getTracks(trackIds: Seq[String]): Seq[Track] = {
+      val response = TracksEndpoint.getTracks(trackIds).asString
+      val json = parse(response.body)
+      (json \ "tracks").extract[List[Track]]
+    }
 
-    def getUserTracks: Option[String] =
+    def getUserSavedTracks: Option[Page[SavedTrack]] =
       MeEndpoint.getUserTracks(oauthToken = authToken)
-        .map(request => request.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          parse(response.body).extract[Page[SavedTrack]]
+        }).orElse(None)
 
-    def userTracksContains(trackIds: Seq[String]): Option[String] =
-      MeEndpoint.
-        userTracksContains(oauthToken = authToken, trackIds = trackIds)
-        .map(request => request.asString.body).orElse(None)
+    def userSavedTracksContains(trackIds: Seq[String]): Option[List[Boolean]] =
+      MeEndpoint.userTracksContains(oauthToken = authToken, trackIds = trackIds)
+        .map(request => {
+          val response = request.asString
+          parse(response.body).extract[List[Boolean]]
+        }).orElse(None)
   }
 
   object Users {

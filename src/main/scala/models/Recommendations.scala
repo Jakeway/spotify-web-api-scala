@@ -1,5 +1,6 @@
 package models
 
-class Recommendations {
-
-}
+case class Recommendations(
+                          seeds: List[RecommendationSeed],
+                          tracks: List[TrackSimple]
+                          )

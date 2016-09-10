@@ -151,15 +151,18 @@ class SpotifyClient(authToken: String = "") {
 
   object Recommendations {
 
-    def getRecommendations(seedArtists: Seq[String],
-                           seedGenres: Seq[String],
-                           seedTracks: Seq[String]): Option[String] =
+    def getRecommendations(seedArtists: Seq[String] = Seq.empty,
+                           seedGenres: Seq[String] = Seq.empty,
+                           seedTracks: Seq[String] = Seq.empty): Option[Recommendations] =
 
       RecommendationsEndpoint.getRecommendations(authToken = authToken,
         seedArtists = seedArtists,
         seedGenres = seedGenres,
         seedTracks = seedTracks)
-        .map(request => request.asString.body).orElse(None)
+        .map(request => {
+          val response = request.asString
+          parse(response.body).extract[Recommendations]
+        }).orElse(None)
   }
 
   object Search {

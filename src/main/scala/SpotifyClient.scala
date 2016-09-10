@@ -167,8 +167,10 @@ class SpotifyClient(authToken: String = "") {
 
   object Search {
 
-    def search(query: String, queryType: Seq[String]): String =
-      SearchEndpoint.search(query, queryType).asString.body
+    def search(query: String, queryType: Seq[String]): SearchResult = {
+      val response = SearchEndpoint.search(query.replace(" ", "+"), queryType).asString
+      parse(response.body).extract[SearchResult]
+    }
   }
 
   object Tracks {

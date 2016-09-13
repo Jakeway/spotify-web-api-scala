@@ -39,9 +39,11 @@ All of the requests are grouped into Objects inside of the SpotifyClient. Those 
 * Tracks
 * Users
 
-### todo
+### todo (not in any particular order)
 * post / put / delete requests
-* optional parameters
+* requests that return a page object should have some way to get the next page
+* better debug info when a request is not successful 
+* implement optional parameters
 * better search functionality
 * use the oauth token provided even if the endpoint doesn't require one (increase rate-limits)
 * create test cases
